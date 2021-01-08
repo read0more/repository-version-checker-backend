@@ -1,5 +1,5 @@
+import { CreateUserDto } from './../prisma/dto/create-user.dto';
 import { PrismaService } from './../prisma/prisma.service';
-import { User } from './interfaces/user.interface';
 import { Request } from 'express';
 import { GithubAuthGuard } from './github-auth.guard';
 import { AuthService } from './auth.service';
@@ -18,7 +18,20 @@ export class AuthController {
 
   @Get('/github/redirect')
   @UseGuards(new GithubAuthGuard())
-  async githubLoginRedirect(@Req() request: Request): Promise<User> {
-    return this.authService.githubLogin(request.user);
+  async githubLoginRedirect(@Req() request: Request): Promise<CreateUserDto> {
+    const user = this.authService.githubLogin(request.user);
+    const dbUser = await this.prismaService.user.findUnique({
+      where: {
+        githubId: user.githubId,
+      },
+    });
+
+    if (!dbUser) {
+      await this.prismaService.user.create({
+        data: user,
+      });
+    }
+
+    return user;
   }
 }

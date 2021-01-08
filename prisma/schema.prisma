@@ -12,7 +12,8 @@ generator client {
 
 model User {
   id Int @id @default(autoincrement())
-  email String
+  githubId String @unique
+  username String
   profileImage String?
   repositories UserRepository[]
 }

@@ -1,4 +1,4 @@
-import { User } from './interfaces/user.interface';
+import { CreateUserDto } from './../prisma/dto/create-user.dto';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-github';
@@ -19,9 +19,9 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     profile: Profile,
     done: (err: any, user: any, info?: any) => void,
   ): Promise<any> {
-    const user: User = {
-      id: profile.id,
-      email: profile.username,
+    const user: CreateUserDto = {
+      githubId: profile.id,
+      username: profile.username,
       profileImage: profile.photos[0].value,
     };
 
