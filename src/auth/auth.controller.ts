@@ -1,3 +1,4 @@
+import { PrismaService } from './../prisma/prisma.service';
 import { User } from './interfaces/user.interface';
 import { Request } from 'express';
 import { GithubAuthGuard } from './github-auth.guard';
@@ -6,7 +7,10 @@ import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly prismaService: PrismaService,
+  ) {}
 
   @Get('/github/login')
   @UseGuards(new GithubAuthGuard())
@@ -14,7 +18,7 @@ export class AuthController {
 
   @Get('/github/redirect')
   @UseGuards(new GithubAuthGuard())
-  githubLoginRedirect(@Req() request: Request): User {
+  async githubLoginRedirect(@Req() request: Request): Promise<User> {
     return this.authService.githubLogin(request.user);
   }
 }

@@ -1,6 +1,6 @@
+import { PrismaModule } from './prisma/prisma.module';
 import { AllExceptionsFilter } from './common/filters/all-exception.filter';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { GithubStrategy } from './auth/github.strategy';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -12,6 +12,7 @@ import { APP_FILTER } from '@nestjs/core';
 
 @Module({
   imports: [
+    PrismaModule,
     AuthModule,
     ConfigModule.forRoot({
       validate,
