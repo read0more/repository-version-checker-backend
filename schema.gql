@@ -50,7 +50,7 @@ type Mutation {
 input CreateUserInput {
   githubId: String!
   username: String!
-  profileImage: String!
+  profileImage: String
 }
 
 input CreateRepositoryInput {
@@ -76,12 +76,10 @@ input UpdateRepositoryVersionInput {
 }
 
 input CreateUserRepositoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  order: Int!
 }
 
 input UpdateUserRepositoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  order: Int
   id: Int!
 }

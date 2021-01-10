@@ -19,7 +19,7 @@ model User {
 }
 
 model UserRepository {  
-  User User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
   userId Int @unique
   repository Repository @relation(fields: [repositoryId], references: [id])
   repositoryId Int @unique

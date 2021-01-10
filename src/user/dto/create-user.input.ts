@@ -8,6 +8,6 @@ export class CreateUserInput {
   @Field()
   username: string;
 
-  @Field()
-  profileImage: string;
+  @Field({ nullable: true })
+  profileImage?: string;
 }
