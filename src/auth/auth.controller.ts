@@ -1,7 +1,7 @@
-import { CreateUserDto } from './../prisma/dto/create-user.dto';
-import { PrismaService } from './../prisma/prisma.service';
+import { GithubAuthGuard } from './guards/github-auth.guard';
+import { UserService } from './../user/user.service';
+import { CreateUserInput } from './../user/dto/create-user.input';
 import { Request } from 'express';
-import { GithubAuthGuard } from './github-auth.guard';
 import { AuthService } from './auth.service';
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 
@@ -9,29 +9,24 @@ import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly prismaService: PrismaService,
+    private readonly userService: UserService,
   ) {}
 
   @Get('/github/login')
-  @UseGuards(new GithubAuthGuard())
+  @UseGuards(GithubAuthGuard)
   githubLogin() {}
 
   @Get('/github/redirect')
-  @UseGuards(new GithubAuthGuard())
-  async githubLoginRedirect(@Req() request: Request): Promise<CreateUserDto> {
-    const user = this.authService.githubLogin(request.user);
-    const dbUser = await this.prismaService.user.findUnique({
-      where: {
-        githubId: user.githubId,
-      },
-    });
+  @UseGuards(GithubAuthGuard)
+  async githubLoginRedirect(@Req() request: Request): Promise<string> {
+    const user = request.user as CreateUserInput;
+    const userJwt = this.authService.githubLogin(user);
+    const dbUser = await this.userService.findOne(user.githubId);
 
     if (!dbUser) {
-      await this.prismaService.user.create({
-        data: user,
-      });
+      await this.userService.create(user);
     }
 
-    return user;
+    return userJwt;
   }
 }

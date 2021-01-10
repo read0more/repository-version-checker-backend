@@ -1,0 +1,87 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type RepositoryVersion {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Repository {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type UserRepository {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type User {
+  id: ID!
+  githubId: String!
+  username: String!
+  profileImage: String
+  repositories: [UserRepository]
+}
+
+type Query {
+  users: [User!]!
+  user(githubId: String!): User!
+  repository(id: Int!): Repository!
+  repositoryVersion(id: Int!): RepositoryVersion!
+  userRepository(id: Int!): UserRepository!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  removeUser(id: Int!): User!
+  createRepository(createRepositoryInput: CreateRepositoryInput!): Repository!
+  updateRepository(updateRepositoryInput: UpdateRepositoryInput!): Repository!
+  removeRepository(id: Int!): Repository!
+  createRepositoryVersion(createRepositoryVersionInput: CreateRepositoryVersionInput!): RepositoryVersion!
+  updateRepositoryVersion(updateRepositoryVersionInput: UpdateRepositoryVersionInput!): RepositoryVersion!
+  removeRepositoryVersion(id: Int!): RepositoryVersion!
+  createUserRepository(createUserRepositoryInput: CreateUserRepositoryInput!): UserRepository!
+  updateUserRepository(updateUserRepositoryInput: UpdateUserRepositoryInput!): UserRepository!
+  removeUserRepository(id: Int!): UserRepository!
+}
+
+input CreateUserInput {
+  githubId: String!
+  username: String!
+  profileImage: String!
+}
+
+input CreateRepositoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateRepositoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateRepositoryVersionInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateRepositoryVersionInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateUserRepositoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateUserRepositoryInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}

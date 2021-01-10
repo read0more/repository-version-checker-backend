@@ -1,13 +1,12 @@
-import { CreateUserDto } from './../prisma/dto/create-user.dto';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { CreateUserInput } from './../user/dto/create-user.input';
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  githubLogin(user): CreateUserDto {
-    if (!user) {
-      throw new HttpException('Unauthorized.', HttpStatus.UNAUTHORIZED);
-    }
+  constructor(private readonly jwtService: JwtService) {}
 
-    return user;
+  githubLogin(user: CreateUserInput): string {
+    return this.jwtService.sign(user);
   }
 }
