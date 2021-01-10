@@ -1,6 +1,6 @@
+import { CreateUserInput } from './../user/dto/create-user.input';
 import { GithubAuthGuard } from './guards/github-auth.guard';
 import { UserService } from './../user/user.service';
-import { CreateUserInput } from './../user/dto/create-user.input';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';

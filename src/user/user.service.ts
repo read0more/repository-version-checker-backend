@@ -25,10 +25,10 @@ export class UserService {
     });
   }
 
-  remove(id: number): Promise<User> {
+  remove(githubId: string): Promise<User> {
     return this.prismaService.user.delete({
       where: {
-        id,
+        githubId,
       },
     });
   }

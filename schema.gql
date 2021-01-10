@@ -35,7 +35,7 @@ type Query {
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
-  removeUser(id: Int!): User!
+  removeUser(githubId: String!): User!
   createRepository(createRepositoryInput: CreateRepositoryInput!): Repository!
   updateRepository(updateRepositoryInput: UpdateRepositoryInput!): Repository!
   removeRepository(id: Int!): Repository!

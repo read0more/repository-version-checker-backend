@@ -3,15 +3,12 @@ import { RepositoryVersionModule } from './repository-version/repository-version
 import { RepositoryModule } from './repository/repository.module';
 import { UserRepositoryModule } from './user-repository/user-repository.module';
 import { UserModule } from './user/user.module';
-import { AllExceptionsFilter } from './common/filters/all-exception.filter';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { validate, Environment } from './env.validation';
-import { APP_FILTER } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
+import { GraphQLError } from 'graphql';
 
 @Module({
   imports: [
@@ -29,21 +26,15 @@ import { GraphQLModule } from '@nestjs/graphql';
       debug: process.env.NODE_ENV === Environment.Development,
       playground: process.env.NODE_ENV === Environment.Development,
       autoSchemaFile: 'schema.gql',
+      formatError: (error: GraphQLError) => {
+        return error;
+      },
     }),
     RepositoryModule,
     RepositoryVersionModule,
     UserModule,
     UserRepositoryModule,
   ],
-  providers: [
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: AllExceptionsFilter,
-    },
-  ],
+  providers: [],
 })
 export class AppModule {}
