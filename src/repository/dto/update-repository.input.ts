@@ -3,6 +3,6 @@ import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 
 @InputType()
 export class UpdateRepositoryInput extends PartialType(CreateRepositoryInput) {
-  @Field(() => Int)
-  id: number;
+  @Field()
+  updatedAt: Date;
 }

@@ -2,6 +2,15 @@ import { InputType, Int, Field } from '@nestjs/graphql';
 
 @InputType()
 export class CreateRepositoryVersionInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field()
+  version: string;
+
+  @Field()
+  url: string;
+
+  @Field()
+  publishedAt: Date;
+
+  @Field()
+  prerelease: boolean;
 }

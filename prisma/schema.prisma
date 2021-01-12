@@ -1,6 +1,9 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// 부모 쪽 모델을 지울 때 cascade가 정상적으로 동작 안함
+// https://github.com/prisma/prisma/issues/4650
+
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -18,22 +21,24 @@ model User {
   repositories UserRepository[]
 }
 
-model UserRepository {  
+model UserRepository {    
   user User @relation(fields: [userId], references: [id])
-  userId Int @unique
+  userId Int
   repository Repository @relation(fields: [repositoryId], references: [id])
-  repositoryId Int @unique
+  repositoryId Int
   order Int
+  repositoryUrl String
+  @@unique([userId, repositoryId])
 }
 
 model Repository {
   id Int @id @default(autoincrement())
-  name String    
+  name String @unique
   updatedAt DateTime @updatedAt
-  versions RepositoryVersion[]
+  versions RepositoryVersion[] 
 }
 
-model RepositoryVersion {
+model RepositoryVersion {  
   id Int @id @default(autoincrement())
   repository Repository @relation(fields: [repositoryId], references: [id])
   repositoryId Int

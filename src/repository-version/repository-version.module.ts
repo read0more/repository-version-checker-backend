@@ -3,6 +3,7 @@ import { RepositoryVersionService } from './repository-version.service';
 import { RepositoryVersionResolver } from './repository-version.resolver';
 
 @Module({
-  providers: [RepositoryVersionResolver, RepositoryVersionService]
+  providers: [RepositoryVersionResolver, RepositoryVersionService],
+  exports: [RepositoryVersionService],
 })
 export class RepositoryVersionModule {}

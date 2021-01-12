@@ -1,3 +1,5 @@
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { RepositoryService } from './repository.service';
 import { Repository } from './entities/repository.entity';
@@ -5,15 +7,18 @@ import { CreateRepositoryInput } from './dto/create-repository.input';
 import { UpdateRepositoryInput } from './dto/update-repository.input';
 
 @Resolver(() => Repository)
+@UseGuards(GqlAuthGuard)
 export class RepositoryResolver {
   constructor(private readonly repositoryService: RepositoryService) {}
 
   @Mutation(() => Repository)
-  createRepository(@Args('createRepositoryInput') createRepositoryInput: CreateRepositoryInput) {
+  createRepository(
+    @Args('createRepositoryInput') createRepositoryInput: CreateRepositoryInput,
+  ) {
     return this.repositoryService.create(createRepositoryInput);
   }
 
-  @Query(() => [Repository], { name: 'repository' })
+  @Query(() => [Repository], { name: 'repositoryAll' })
   findAll() {
     return this.repositoryService.findAll();
   }
@@ -24,8 +29,11 @@ export class RepositoryResolver {
   }
 
   @Mutation(() => Repository)
-  updateRepository(@Args('updateRepositoryInput') updateRepositoryInput: UpdateRepositoryInput) {
-    return this.repositoryService.update(updateRepositoryInput.id, updateRepositoryInput);
+  updateRepository(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('updateRepositoryInput') updateRepositoryInput: UpdateRepositoryInput,
+  ) {
+    return this.repositoryService.update(id, updateRepositoryInput);
   }
 
   @Mutation(() => Repository)

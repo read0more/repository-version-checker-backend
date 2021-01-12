@@ -1,5 +1,5 @@
+import { UserRepository } from './../../user-repository/entities/user-repository.entity';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { UserRepository } from 'src/user-repository/entities/user-repository.entity';
 
 @ObjectType()
 export class User {
@@ -15,6 +15,6 @@ export class User {
   @Field({ nullable: true })
   profileImage?: string;
 
-  @Field(() => [UserRepository], { nullable: 'itemsAndList' })
+  @Field(() => [UserRepository], { nullable: 'items' })
   repositories?: UserRepository[];
 }

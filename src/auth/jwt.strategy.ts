@@ -1,4 +1,4 @@
-import { CreateUserInput } from './../user/dto/create-user.input';
+import { User } from 'src/user/entities/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
@@ -15,8 +15,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any): Promise<CreateUserInput> {
+  async validate(payload: any): Promise<User> {
     return {
+      id: payload.id,
       githubId: payload.githubId,
       username: payload.username,
       profileImage: payload.profileImage,

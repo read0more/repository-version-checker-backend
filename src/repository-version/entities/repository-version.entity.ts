@@ -1,7 +1,16 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 
 @ObjectType()
 export class RepositoryVersion {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field(() => ID)
+  id: number;
+
+  @Field()
+  prerelease: boolean;
+
+  @Field()
+  url: string;
+
+  @Field()
+  publishedAt: Date;
 }

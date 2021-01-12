@@ -3,18 +3,32 @@
 # ------------------------------------------------------
 
 type RepositoryVersion {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: ID!
+  prerelease: Boolean!
+  url: String!
+  publishedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type RemoveUserRepositoryOutput {
+  count: Int!
 }
 
 type Repository {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  id: ID!
+  name: String!
+  updatedAt: DateTime!
+  versions: [RepositoryVersion]!
 }
 
 type UserRepository {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  repository: Repository!
+  order: Int!
+  repositoryUrl: String!
 }
 
 type User {
@@ -22,26 +36,27 @@ type User {
   githubId: String!
   username: String!
   profileImage: String
-  repositories: [UserRepository]
+  repositories: [UserRepository]!
 }
 
 type Query {
   users: [User!]!
-  user(githubId: String!): User!
+  user(id: Float!): User!
+  repositoryAll: [Repository!]!
   repository(id: Int!): Repository!
   repositoryVersion(id: Int!): RepositoryVersion!
-  userRepository(id: Int!): UserRepository!
+  userRepository: [UserRepository!]!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   removeUser(githubId: String!): User!
   createRepository(createRepositoryInput: CreateRepositoryInput!): Repository!
-  updateRepository(updateRepositoryInput: UpdateRepositoryInput!): Repository!
+  updateRepository(updateRepositoryInput: UpdateRepositoryInput!, id: Int!): Repository!
   removeRepository(id: Int!): Repository!
-  createRepositoryVersion(createRepositoryVersionInput: CreateRepositoryVersionInput!): RepositoryVersion!
+  createRepositoryVersion(createRepositoryVersionInput: CreateRepositoryVersionInput!, repositoryId: Float!): RepositoryVersion!
   updateRepositoryVersion(updateRepositoryVersionInput: UpdateRepositoryVersionInput!): RepositoryVersion!
-  removeRepositoryVersion(id: Int!): RepositoryVersion!
+  removeRepositoryVersion(repositoryId: Int!): RemoveUserRepositoryOutput!
   createUserRepository(createUserRepositoryInput: CreateUserRepositoryInput!): UserRepository!
   updateUserRepository(updateUserRepositoryInput: UpdateUserRepositoryInput!): UserRepository!
   removeUserRepository(id: Int!): UserRepository!
@@ -54,32 +69,36 @@ input CreateUserInput {
 }
 
 input CreateRepositoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
 }
 
 input UpdateRepositoryInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  name: String
+  updatedAt: DateTime!
 }
 
 input CreateRepositoryVersionInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  version: String!
+  url: String!
+  publishedAt: DateTime!
+  prerelease: Boolean!
 }
 
 input UpdateRepositoryVersionInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  version: String
+  url: String
+  publishedAt: DateTime
+  prerelease: Boolean
   id: Int!
 }
 
 input CreateUserRepositoryInput {
+  repositoryUrl: String!
   order: Int!
 }
 
 input UpdateUserRepositoryInput {
+  repositoryUrl: String
   order: Int
   id: Int!
 }

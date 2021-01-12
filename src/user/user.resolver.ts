@@ -15,14 +15,13 @@ export class UserResolver {
   }
 
   @Query(() => [User], { name: 'users' })
-  @UseGuards(GqlAuthGuard)
   findAll() {
     return this.userService.findAll();
   }
 
   @Query(() => User, { name: 'user' })
-  findOne(@Args('githubId') githubId: string) {
-    return this.userService.findOne(githubId);
+  findOne(@Args('id') id: number) {
+    return this.userService.findOneByid(id);
   }
 
   @Mutation(() => User)

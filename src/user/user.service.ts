@@ -17,7 +17,15 @@ export class UserService {
     return this.prismaService.user.findMany();
   }
 
-  findOne(githubId: string): Promise<User> {
+  findOneByid(id: number): Promise<User> {
+    return this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
+  findOneByGithubId(githubId: string): Promise<User> {
     return this.prismaService.user.findUnique({
       where: {
         githubId,

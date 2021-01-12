@@ -1,9 +1,9 @@
-import { CreateUserInput } from './../user/dto/create-user.input';
 import { GithubAuthGuard } from './guards/github-auth.guard';
 import { UserService } from './../user/user.service';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { User } from 'src/user/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -19,14 +19,13 @@ export class AuthController {
   @Get('/github/redirect')
   @UseGuards(GithubAuthGuard)
   async githubLoginRedirect(@Req() request: Request): Promise<string> {
-    const user = request.user as CreateUserInput;
-    const userJwt = this.authService.githubLogin(user);
-    const dbUser = await this.userService.findOne(user.githubId);
+    const user = request.user as User;
+    let dbUser = await this.userService.findOneByGithubId(user.githubId);
 
     if (!dbUser) {
-      await this.userService.create(user);
+      dbUser = await this.userService.create(user);
     }
 
-    return userJwt;
+    return this.authService.githubLogin(dbUser);
   }
 }
