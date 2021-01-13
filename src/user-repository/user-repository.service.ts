@@ -67,7 +67,14 @@ export class UserRepositoryService {
     return `This action updates a #${id} userRepository`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} userRepository`;
+  remove(userId: number, repositoryId: number) {
+    return this.prismaService.userRepository.delete({
+      where: {
+        userId_repositoryId: {
+          userId,
+          repositoryId,
+        },
+      },
+    });
   }
 }
