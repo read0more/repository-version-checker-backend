@@ -17,7 +17,7 @@ export class UserService {
     return this.prismaService.user.findMany();
   }
 
-  findOneByid(id: number): Promise<User> {
+  findOneById(id: number): Promise<User> {
     return this.prismaService.user.findUnique({
       where: {
         id,
