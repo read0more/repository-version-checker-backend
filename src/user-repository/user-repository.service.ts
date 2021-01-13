@@ -63,8 +63,20 @@ export class UserRepositoryService {
     });
   }
 
-  update(id: number, updateUserRepositoryInput: UpdateUserRepositoryInput) {
-    return `This action updates a #${id} userRepository`;
+  update(
+    userId: number,
+    repositoryId: number,
+    updateUserRepositoryInput: UpdateUserRepositoryInput,
+  ) {
+    return this.prismaService.userRepository.update({
+      data: updateUserRepositoryInput,
+      where: {
+        userId_repositoryId: {
+          repositoryId,
+          userId,
+        },
+      },
+    });
   }
 
   remove(userId: number, repositoryId: number) {

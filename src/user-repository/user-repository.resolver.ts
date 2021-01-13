@@ -100,11 +100,14 @@ export class UserRepositoryResolver {
 
   @Mutation(() => UserRepository)
   updateUserRepository(
+    @Args('repositoryId') repositoryId: number,
     @Args('updateUserRepositoryInput')
     updateUserRepositoryInput: UpdateUserRepositoryInput,
+    @CurrentUser() user: User,
   ) {
     return this.userRepositoryService.update(
-      updateUserRepositoryInput.id,
+      user.id,
+      repositoryId,
       updateUserRepositoryInput,
     );
   }

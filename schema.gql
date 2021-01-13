@@ -58,8 +58,8 @@ type Mutation {
   updateRepositoryVersion(updateRepositoryVersionInput: UpdateRepositoryVersionInput!): RepositoryVersion!
   removeRepositoryVersion(repositoryId: Int!): RemoveUserRepositoryOutput!
   createUserRepository(createUserRepositoryInput: CreateUserRepositoryInput!): UserRepository!
-  updateUserRepository(updateUserRepositoryInput: UpdateUserRepositoryInput!): UserRepository!
-  removeUserRepository(id: Int!): UserRepository!
+  updateUserRepository(updateUserRepositoryInput: UpdateUserRepositoryInput!, repositoryId: Float!): UserRepository!
+  removeUserRepository(repositoryId: Float!): UserRepository!
 }
 
 input CreateUserInput {
@@ -100,5 +100,4 @@ input CreateUserRepositoryInput {
 input UpdateUserRepositoryInput {
   repositoryUrl: String
   order: Int
-  id: Int!
 }
