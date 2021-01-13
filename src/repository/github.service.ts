@@ -1,7 +1,11 @@
 import { RepositoryVersionService } from './../repository-version/repository-version.service';
-import { RepositoryUrlException } from './exceptions/repository-url.exception';
 import { CreateRepositoryVersionInput } from './../repository-version/dto/create-repository-version.input';
-import { HttpService, Injectable } from '@nestjs/common';
+import {
+  HttpService,
+  Injectable,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 
 @Injectable()
 export class GithubService {
@@ -34,7 +38,10 @@ export class GithubService {
     const [owner, repositoryName] = repositoryUrl.split('/');
 
     if (!owner || !repositoryName) {
-      throw new RepositoryUrlException();
+      throw new HttpException(
+        '입력한 URL이 github의 repository URL이 맞는지 확인해 주세요.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     }
 
     return [owner, repositoryName];
