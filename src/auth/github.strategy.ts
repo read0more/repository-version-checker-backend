@@ -1,12 +1,12 @@
 import { CreateUserInput } from './../user/dto/create-user.input';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, Profile } from 'passport-github';
+import { Strategy, Profile, StrategyOptionsWithRequest } from 'passport-github';
 import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
   constructor(private readonly configService: ConfigService) {
-    super({
+    super(<StrategyOptionsWithRequest>{
       clientID: configService.get('GITHUB_CLIENT_ID'),
       clientSecret: configService.get('GITHUB_CLIENT_SECRET'),
     });

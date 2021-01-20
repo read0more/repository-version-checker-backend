@@ -19,6 +19,7 @@ export class AuthController {
   @Get('/github/redirect')
   @UseGuards(GithubAuthGuard)
   async githubLoginRedirect(@Req() request: Request): Promise<string> {
+    // todo: 깃헙 콜백URL은 client쪽으로 바꾸고 해당 정보 받아서 db에 생성하고 jwt리턴하게 변경
     const user = request.user as User;
     let dbUser = await this.userService.findOneByGithubId(user.githubId);
 
