@@ -1,8 +1,8 @@
 import { GithubAuthGuard } from './guards/github-auth.guard';
 import { UserService } from './../user/user.service';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
 
 @Controller('auth')
@@ -12,14 +12,21 @@ export class AuthController {
     private readonly userService: UserService,
   ) {}
 
+  @Get('/test')
+  test(@Req() req: Request) {
+    console.log(req.cookies);
+  }
+
   @Get('/github/login')
   @UseGuards(GithubAuthGuard)
   githubLogin() {}
 
   @Get('/github/redirect')
   @UseGuards(GithubAuthGuard)
-  async githubLoginRedirect(@Req() request: Request): Promise<string> {
-    // todo: 깃헙 콜백URL은 client쪽으로 바꾸고 해당 정보 받아서 db에 생성하고 jwt리턴하게 변경
+  async githubLoginRedirect(
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
     const user = request.user as User;
     let dbUser = await this.userService.findOneByGithubId(user.githubId);
 
@@ -27,6 +34,12 @@ export class AuthController {
       dbUser = await this.userService.create(user);
     }
 
-    return this.authService.githubLogin(dbUser);
+    const jwt = this.authService.githubLogin(dbUser);
+
+    response.cookie('Authorization', jwt, {
+      httpOnly: true,
+    });
+
+    return response.redirect('http://localhost:3001');
   }
 }
