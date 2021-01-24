@@ -1,3 +1,5 @@
+import { CLIENT_URL } from './../common/constants';
+import { ConfigService } from '@nestjs/config';
 import { GithubAuthGuard } from './guards/github-auth.guard';
 import { UserService } from './../user/user.service';
 import { Request, Response } from 'express';
@@ -10,11 +12,13 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    private readonly configService: ConfigService,
   ) {}
 
-  @Get('/test')
-  test(@Req() req: Request) {
-    console.log(req.cookies);
+  @Get('/logout')
+  logout(@Res() response: Response) {
+    this.authService.logout(response);
+    return response.redirect(this.configService.get(CLIENT_URL));
   }
 
   @Get('/github/login')
@@ -40,6 +44,6 @@ export class AuthController {
       httpOnly: true,
     });
 
-    return response.redirect('http://localhost:3001');
+    return response.redirect(this.configService.get(CLIENT_URL));
   }
 }

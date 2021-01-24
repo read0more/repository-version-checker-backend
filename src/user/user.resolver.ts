@@ -1,6 +1,7 @@
+import { UnauthenticatedException } from '../auth/exceptions/unauthenticated.exception';
 import { GqlAuthGuard } from './../auth/guards/gql-auth.guard';
 import { CurrentUser } from './../auth/decorator/current-user.decorator';
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
@@ -31,7 +32,7 @@ export class UserResolver {
     @CurrentUser() user: CreateUserInput,
   ) {
     if (user.githubId !== githubId) {
-      throw UnauthorizedException;
+      throw UnauthenticatedException;
     }
 
     return this.userService.remove(githubId);

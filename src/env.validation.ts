@@ -1,5 +1,6 @@
 import { plainToClass } from 'class-transformer';
-import { IsEnum, validateSync } from 'class-validator';
+import { IsDefined, IsEnum, validateSync } from 'class-validator';
+import * as constants from './common/constants';
 
 export enum Environment {
   Development = 'development',
@@ -8,7 +9,22 @@ export enum Environment {
 
 class EnvironmentVariables {
   @IsEnum(Environment)
-  NODE_ENV: Environment;
+  [constants.NODE_ENV]: Environment;
+
+  @IsDefined()
+  [constants.GITHUB_CLIENT_ID]: string;
+
+  @IsDefined()
+  [constants.GITHUB_CLIENT_SECRET]: string;
+
+  @IsDefined()
+  [constants.CLIENT_URL]: string;
+
+  @IsDefined()
+  [constants.DATABASE_URL]: string;
+
+  @IsDefined()
+  [constants.JWT_SECRET]: string;
 }
 
 export function validate(config: Record<string, unknown>) {
