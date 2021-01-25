@@ -1,3 +1,4 @@
+import { AuthGuard } from '@nestjs/passport';
 import { CLIENT_URL } from './../common/constants';
 import { ConfigService } from '@nestjs/config';
 import { GithubAuthGuard } from './guards/github-auth.guard';
@@ -14,6 +15,16 @@ export class AuthController {
     private readonly userService: UserService,
     private readonly configService: ConfigService,
   ) {}
+
+  @Get('/check')
+  @UseGuards(AuthGuard('jwt'))
+  check() {
+    // 쿠키의 jwt 확인
+    return {
+      statusCode: 200,
+      message: 'OK',
+    };
+  }
 
   @Get('/logout')
   logout(@Res() response: Response) {
