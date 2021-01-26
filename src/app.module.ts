@@ -20,7 +20,7 @@ import { GraphQLError } from 'graphql';
       envFilePath:
         process.env.NODE_ENV === Environment.Development
           ? '.env.dev'
-          : '.dev.prod',
+          : '.env.prod',
     }),
     GraphQLModule.forRoot({
       debug: process.env.NODE_ENV === Environment.Development,
