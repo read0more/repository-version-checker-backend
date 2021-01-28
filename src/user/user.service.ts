@@ -22,6 +22,17 @@ export class UserService {
       where: {
         id,
       },
+      include: {
+        repositories: {
+          include: {
+            repository: {
+              include: {
+                versions: true,
+              },
+            },
+          },
+        },
+      },
     });
   }
 

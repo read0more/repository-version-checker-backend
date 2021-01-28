@@ -18,10 +18,15 @@ export class AuthController {
 
   @Get('/login')
   @UseGuards(AuthGuard('jwt'))
-  check(@Req() request: Request) {
+  async check(@Req() request: Request) {
+    const user = request.user as User;
+    const repositories = (await this.userService.findOneById(user.id))
+      .repositories;
+    user.repositories = repositories;
+
     return {
       statusCode: 200,
-      user: request.user,
+      user,
     };
   }
 
