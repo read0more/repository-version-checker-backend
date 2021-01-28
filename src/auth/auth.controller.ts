@@ -16,13 +16,12 @@ export class AuthController {
     private readonly configService: ConfigService,
   ) {}
 
-  @Get('/check')
+  @Get('/login')
   @UseGuards(AuthGuard('jwt'))
-  check() {
-    // 쿠키의 jwt 확인
+  check(@Req() request: Request) {
     return {
       statusCode: 200,
-      message: 'OK',
+      user: request.user,
     };
   }
 
