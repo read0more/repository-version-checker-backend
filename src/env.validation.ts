@@ -21,6 +21,9 @@ class EnvironmentVariables {
   [constants.CLIENT_URL]: string;
 
   @IsDefined()
+  [constants.CLIENT_LOGIN_URL]: string;
+
+  @IsDefined()
   [constants.DATABASE_URL]: string;
 
   @IsDefined()

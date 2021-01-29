@@ -1,5 +1,5 @@
 import { AuthGuard } from '@nestjs/passport';
-import { CLIENT_URL } from './../common/constants';
+import { CLIENT_LOGIN_URL } from './../common/constants';
 import { ConfigService } from '@nestjs/config';
 import { GithubAuthGuard } from './guards/github-auth.guard';
 import { UserService } from './../user/user.service';
@@ -16,24 +16,13 @@ export class AuthController {
     private readonly configService: ConfigService,
   ) {}
 
-  @Get('/login')
+  @Get('/check')
   @UseGuards(AuthGuard('jwt'))
-  async check(@Req() request: Request) {
-    const user = request.user as User;
-    const repositories = (await this.userService.findOneById(user.id))
-      .repositories;
-    user.repositories = repositories;
-
+  check() {
     return {
       statusCode: 200,
-      user,
+      message: 'OK',
     };
-  }
-
-  @Get('/logout')
-  logout(@Res() response: Response) {
-    this.authService.logout(response);
-    return response.redirect(this.configService.get(CLIENT_URL));
   }
 
   @Get('/github/login')
@@ -55,10 +44,8 @@ export class AuthController {
 
     const jwt = this.authService.githubLogin(dbUser);
 
-    response.cookie('Authorization', jwt, {
-      httpOnly: true,
-    });
-
-    return response.redirect(this.configService.get(CLIENT_URL));
+    return response.redirect(
+      `${this.configService.get(CLIENT_LOGIN_URL)}?jwt=${jwt}`,
+    );
   }
 }

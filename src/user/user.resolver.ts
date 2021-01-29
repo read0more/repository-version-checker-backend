@@ -5,7 +5,7 @@ import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
-import { UnauthorizedException, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 @Resolver(() => User)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
@@ -25,12 +25,15 @@ export class UserResolver {
     return this.userService.findOneById(id);
   }
 
+  @Query(() => User)
+  @UseGuards(GqlAuthGuard)
+  me(@CurrentUser() user: User) {
+    return this.userService.findOneById(user.id);
+  }
+
   @Mutation(() => User)
   @UseGuards(GqlAuthGuard)
-  removeUser(
-    @Args('githubId') githubId: string,
-    @CurrentUser() user: CreateUserInput,
-  ) {
+  removeUser(@Args('githubId') githubId: string, @CurrentUser() user: User) {
     if (user.githubId !== githubId) {
       throw UnauthenticatedException;
     }

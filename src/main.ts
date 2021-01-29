@@ -1,7 +1,6 @@
 import { Environment } from './env.validation';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
@@ -14,7 +13,6 @@ async function bootstrap() {
   app.enableCors({
     origin: process.env.CLIENT_URL,
   });
-  app.use(cookieParser());
   await app.listen(process.env.port);
 }
 bootstrap();
