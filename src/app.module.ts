@@ -19,7 +19,7 @@ import { GraphQLError } from 'graphql';
       isGlobal: true,
       envFilePath:
         process.env.NODE_ENV === Environment.Development
-          ? '.env.dev'
+          ? '.env.local'
           : '.env.prod',
     }),
     GraphQLModule.forRoot({
@@ -28,6 +28,10 @@ import { GraphQLError } from 'graphql';
       autoSchemaFile: 'schema.gql',
       formatError: (error: GraphQLError) => {
         return error;
+      },
+      cors: {
+        origin: process.env.CLIENT_URL,
+        credentials: true,
       },
     }),
     RepositoryModule,

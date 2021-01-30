@@ -19,10 +19,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prisma:migrate:dev": "dotenv -e .env.dev -- npx prisma migrate dev --preview-feature",
-    "prisma:generate:dev": "dotenv -e .env.dev -- npx prisma generate",
+    "prisma:migrate:dev": "dotenv -e .env.local -- npx prisma migrate dev --preview-feature",
+    "prisma:generate:dev": "dotenv -e .env.local -- npx prisma generate",
     "prisma:dev": "yarn prisma:migrate:dev & yarn prisma:generate:dev",
-    "prisma:studio": "dotenv -e .env.dev -- npx prisma studio"
+    "prisma:studio": "dotenv -e .env.local -- npx prisma studio"
   },
   "dependencies": {
     "@nestjs/common": "^7.5.1",
