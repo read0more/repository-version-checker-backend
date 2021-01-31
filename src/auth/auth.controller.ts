@@ -16,15 +16,6 @@ export class AuthController {
     private readonly configService: ConfigService,
   ) {}
 
-  @Get('/check')
-  @UseGuards(AuthGuard('jwt'))
-  check() {
-    return {
-      statusCode: 200,
-      message: 'OK',
-    };
-  }
-
   @Get('/github/login')
   @UseGuards(GithubAuthGuard)
   githubLogin() {}
