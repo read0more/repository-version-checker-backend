@@ -43,7 +43,7 @@ type Query {
   users: [User!]!
   user(id: Float!): User!
   me: User!
-  repositoryAll: [Repository!]!
+  allRepository: [Repository!]!
   repository(id: Int!): Repository!
   repositoryVersion(id: Int!): RepositoryVersion!
   userRepository: [UserRepository!]!

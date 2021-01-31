@@ -18,7 +18,7 @@ export class RepositoryResolver {
     return this.repositoryService.create(createRepositoryInput);
   }
 
-  @Query(() => [Repository], { name: 'repositoryAll' })
+  @Query(() => [Repository], { name: 'allRepository' })
   findAll() {
     return this.repositoryService.findAll();
   }
