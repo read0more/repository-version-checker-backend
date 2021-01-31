@@ -25,8 +25,7 @@ model UserRepository {
   user User @relation(fields: [userId], references: [id])
   userId Int
   repository Repository @relation(fields: [repositoryId], references: [id])
-  repositoryId Int
-  order Int
+  repositoryId Int  
   repositoryUrl String
   @@unique([userId, repositoryId])
 }

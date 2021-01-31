@@ -27,7 +27,6 @@ type Repository {
 
 type UserRepository {
   repository: Repository!
-  order: Int!
   repositoryUrl: String!
 }
 
@@ -95,10 +94,8 @@ input UpdateRepositoryVersionInput {
 
 input CreateUserRepositoryInput {
   repositoryUrl: String!
-  order: Int!
 }
 
 input UpdateUserRepositoryInput {
   repositoryUrl: String
-  order: Int
 }
