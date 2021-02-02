@@ -2,7 +2,7 @@ import { Repository } from './../repository/entities/repository.entity';
 import { GithubService } from './../repository/github.service';
 import { RepositoryVersionService } from './../repository-version/repository-version.service';
 import { RepositoryService } from './../repository/repository.service';
-import { UseGuards, HttpException, HttpStatus } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
 import { CurrentUser } from './../auth/decorator/current-user.decorator';
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
@@ -12,6 +12,7 @@ import { CreateUserRepositoryInput } from './dto/create-user-repository.input';
 import { UpdateUserRepositoryInput } from './dto/update-user-repository.input';
 import { User } from 'src/user/entities/user.entity';
 import { isAfter, subMinutes } from 'date-fns';
+import { UserInputError } from 'apollo-server-core';
 
 @Resolver(() => UserRepository)
 @UseGuards(GqlAuthGuard)
@@ -45,10 +46,9 @@ export class UserRepositoryResolver {
       );
 
       if (existUserRepository) {
-        throw new HttpException(
-          '이미 추가한 Repository 입니다.',
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new UserInputError('이미 추가한 Repository 입니다.', {
+          invalidArgs: createUserRepositoryInput.repositoryUrl,
+        });
       }
 
       // 정보가 있다면 마지막 업데이트가 30분이 지났는지 확인
