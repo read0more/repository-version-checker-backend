@@ -13,7 +13,7 @@ export class RepositoryVersionResolver {
 
   @Mutation(() => RepositoryVersion)
   createRepositoryVersion(
-    @Args('repositoryId') repositoryId: number,
+    @Args('repositoryId', { type: () => Int }) repositoryId: number,
     @Args('createRepositoryVersionInput')
     createRepositoryVersionInput: CreateRepositoryVersionInput,
   ) {

@@ -100,7 +100,7 @@ export class UserRepositoryResolver {
 
   @Mutation(() => UserRepository)
   updateUserRepository(
-    @Args('repositoryId') repositoryId: number,
+    @Args('repositoryId', { type: () => Int }) repositoryId: number,
     @Args('updateUserRepositoryInput')
     updateUserRepositoryInput: UpdateUserRepositoryInput,
     @CurrentUser() user: User,
@@ -114,7 +114,7 @@ export class UserRepositoryResolver {
 
   @Mutation(() => UserRepository)
   removeUserRepository(
-    @Args('repositoryId') repositoryId: number,
+    @Args('repositoryId', { type: () => Int }) repositoryId: number,
     @CurrentUser() user: User,
   ) {
     return this.userRepositoryService.remove(user.id, repositoryId);
