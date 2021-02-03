@@ -1,11 +1,7 @@
+import { InvalidUrlException } from './exceptions/invalid-url.exception';
 import { RepositoryVersionService } from './../repository-version/repository-version.service';
 import { CreateRepositoryVersionInput } from './../repository-version/dto/create-repository-version.input';
-import {
-  HttpService,
-  Injectable,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { HttpService, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class GithubService {
@@ -15,22 +11,30 @@ export class GithubService {
   ) {}
 
   async getRepositoryReleasesInfo(owner: string, repositoryName: string) {
-    const response = await this.httpService
-      .get(
-        `https://api.github.com/repos/${owner}/${repositoryName}/releases?per_page=10`,
-      )
-      .toPromise();
+    try {
+      const response = await this.httpService
+        .get(
+          `https://api.github.com/repos/${owner}/${repositoryName}/releases?per_page=10`,
+        )
+        .toPromise();
 
-    const versions: Array<CreateRepositoryVersionInput> = response.data.map(
-      (data) => ({
-        version: data.tag_name,
-        url: data.html_url,
-        publishedAt: new Date(data.published_at),
-        prerelease: data.prerelease,
-      }),
-    );
+      const versions: Array<CreateRepositoryVersionInput> = response.data.map(
+        (data) => ({
+          version: data.tag_name,
+          url: data.html_url,
+          publishedAt: new Date(data.published_at),
+          prerelease: data.prerelease,
+        }),
+      );
 
-    return versions;
+      return versions;
+    } catch (error) {
+      if (error.response.status === 404) {
+        throw new InvalidUrlException();
+      }
+
+      throw error;
+    }
   }
 
   splitGithubUrl(repositoryUrl: string) {
@@ -38,10 +42,7 @@ export class GithubService {
     const [owner, repositoryName] = repositoryUrl.split('/');
 
     if (!owner || !repositoryName) {
-      throw new HttpException(
-        '입력한 URL이 github의 repository URL이 맞는지 확인해 주세요.',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      throw new InvalidUrlException();
     }
 
     return [owner, repositoryName];

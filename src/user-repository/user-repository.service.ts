@@ -37,43 +37,12 @@ export class UserRepositoryService {
     });
   }
 
-  findAll(id: number): Promise<UserRepository[]> {
-    return this.prismaService.userRepository.findMany({
-      where: {
-        userId: id,
-      },
-      include: {
-        repository: {
-          include: {
-            versions: true,
-          },
-        },
-      },
-    });
-  }
-
   findOne(userId: number, repositoryId: number) {
     return this.prismaService.userRepository.findUnique({
       where: {
         userId_repositoryId: {
           userId,
           repositoryId,
-        },
-      },
-    });
-  }
-
-  update(
-    userId: number,
-    repositoryId: number,
-    updateUserRepositoryInput: UpdateUserRepositoryInput,
-  ) {
-    return this.prismaService.userRepository.update({
-      data: updateUserRepositoryInput,
-      where: {
-        userId_repositoryId: {
-          repositoryId,
-          userId,
         },
       },
     });

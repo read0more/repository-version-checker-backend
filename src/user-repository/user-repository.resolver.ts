@@ -5,11 +5,10 @@ import { RepositoryService } from './../repository/repository.service';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
 import { CurrentUser } from './../auth/decorator/current-user.decorator';
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, Int } from '@nestjs/graphql';
 import { UserRepositoryService } from './user-repository.service';
 import { UserRepository } from './entities/user-repository.entity';
 import { CreateUserRepositoryInput } from './dto/create-user-repository.input';
-import { UpdateUserRepositoryInput } from './dto/update-user-repository.input';
 import { User } from 'src/user/entities/user.entity';
 import { isAfter, subMinutes } from 'date-fns';
 import { UserInputError } from 'apollo-server-core';
@@ -90,25 +89,6 @@ export class UserRepositoryResolver {
       createUserRepositoryInput,
       user.id,
       targetRepository.id,
-    );
-  }
-
-  @Query(() => [UserRepository], { name: 'userRepository' })
-  findAll(@CurrentUser() user: User) {
-    return this.userRepositoryService.findAll(user.id);
-  }
-
-  @Mutation(() => UserRepository)
-  updateUserRepository(
-    @Args('repositoryId', { type: () => Int }) repositoryId: number,
-    @Args('updateUserRepositoryInput')
-    updateUserRepositoryInput: UpdateUserRepositoryInput,
-    @CurrentUser() user: User,
-  ) {
-    return this.userRepositoryService.update(
-      user.id,
-      repositoryId,
-      updateUserRepositoryInput,
     );
   }
 

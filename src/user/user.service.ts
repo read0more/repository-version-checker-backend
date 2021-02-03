@@ -13,10 +13,6 @@ export class UserService {
     });
   }
 
-  findAll(): Promise<User[]> {
-    return this.prismaService.user.findMany();
-  }
-
   findOneById(id: number): Promise<User> {
     return this.prismaService.user.findUnique({
       where: {
