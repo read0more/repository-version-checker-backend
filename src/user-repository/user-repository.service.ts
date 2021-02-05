@@ -43,6 +43,17 @@ export class UserRepositoryService {
     });
   }
 
+  findOneByRepositoryIdAndUserId(userId: number, repositoryId: number) {
+    return this.prismaService.userRepository.findUnique({
+      where: {
+        userId_repositoryId: {
+          userId,
+          repositoryId,
+        },
+      },
+    });
+  }
+
   remove(id) {
     return this.prismaService.userRepository.delete({
       where: {

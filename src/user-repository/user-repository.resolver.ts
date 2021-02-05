@@ -38,7 +38,8 @@ export class UserRepositoryResolver {
     );
 
     if (targetRepository) {
-      const existUserRepository = await this.userRepositoryService.findOne(
+      const existUserRepository = await this.userRepositoryService.findOneByRepositoryIdAndUserId(
+        user.id,
         targetRepository.id,
       );
 
