@@ -1,14 +1,18 @@
+import { UserRepositoryService } from './../user-repository/user-repository.service';
+import { GithubService } from './../repository/github.service';
 import { UnauthenticatedException } from '../auth/exceptions/unauthenticated.exception';
 import { GqlAuthGuard } from './../auth/guards/gql-auth.guard';
 import { CurrentUser } from './../auth/decorator/current-user.decorator';
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
-import { CreateUserInput } from './dto/create-user.input';
 import { UseGuards } from '@nestjs/common';
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly githubService: GithubService,
+  ) {}
 
   @Query(() => User, { name: 'user' })
   findOne(@Args('id', { type: () => Int }) id: number) {
@@ -17,7 +21,23 @@ export class UserResolver {
 
   @Query(() => User)
   @UseGuards(GqlAuthGuard)
-  me(@CurrentUser() user: User) {
+  async me(@CurrentUser() user: User) {
+    // userRepository 버전 정보 갱신
+    const userByDB = await this.userService.findOneById(user.id);
+    const batchs = userByDB.repositories.map(
+      ({ repository, repositoryUrl }) => {
+        const [owner, repositoryName] = this.githubService.splitGithubUrl(
+          repositoryUrl,
+        );
+        return this.githubService.updateReleaseInfo(
+          repository,
+          owner,
+          repositoryName,
+        );
+      },
+    );
+
+    await Promise.all(batchs);
     return this.userService.findOneById(user.id);
   }
 

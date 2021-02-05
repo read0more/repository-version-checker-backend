@@ -49,41 +49,18 @@ export class UserRepositoryResolver {
           invalidArgs: createUserRepositoryInput.repositoryUrl,
         });
       }
-
-      // 정보가 있다면 마지막 업데이트가 30분이 지났는지 확인
-      if (
-        isAfter(
-          subMinutes(new Date(), 30),
-          new Date(targetRepository.updatedAt),
-        )
-      ) {
-        // 지났다면 API로 repository_version기존 내용 지우고 테이블에 다시 넣어 갱신, repository의 updatedAt을 갱신
-        await this.repositoryVersionService.removeByRepositoryId(
-          targetRepository.id,
-        );
-
-        await this.githubService.updateReleaseInfo(
-          targetRepository.id,
-          owner,
-          repositoryName,
-        );
-
-        await this.repositoryService.update(targetRepository.id, {
-          updatedAt: new Date(),
-        });
-      }
     } else {
-      // 정보가 없다면 API로 repository, repository_version 갱신, 해당 내용을 추가
+      // 정보가 없다면 DB에 repository생성 레코드 생성 후, API로 repository_version 추가
       targetRepository = await this.repositoryService.create({
         name,
       });
-
-      await this.githubService.updateReleaseInfo(
-        targetRepository.id,
-        owner,
-        repositoryName,
-      );
     }
+
+    await this.githubService.updateReleaseInfo(
+      targetRepository,
+      owner,
+      repositoryName,
+    );
 
     return this.userRepositoryService.create(
       createUserRepositoryInput,

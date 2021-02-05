@@ -1,12 +1,16 @@
+import { RepositoryService } from './repository.service';
+import { Repository } from './entities/repository.entity';
 import { InvalidUrlException } from './exceptions/invalid-url.exception';
 import { RepositoryVersionService } from './../repository-version/repository-version.service';
 import { CreateRepositoryVersionInput } from './../repository-version/dto/create-repository-version.input';
 import { HttpService, Injectable } from '@nestjs/common';
+import { isAfter, subMinutes } from 'date-fns';
 
 @Injectable()
 export class GithubService {
   constructor(
     private readonly httpService: HttpService,
+    private readonly repositoryService: RepositoryService,
     private readonly repositoryVersionService: RepositoryVersionService,
   ) {}
 
@@ -49,10 +53,17 @@ export class GithubService {
   }
 
   async updateReleaseInfo(
-    repositoryId: number,
+    repository: Repository,
     owner: string,
     repositoryName: string,
   ) {
+    // 갱신한지 1분도 되지 않았다면 갱신하지 않음
+    if (!isAfter(subMinutes(new Date(), 1), new Date(repository.updatedAt))) {
+      return;
+    }
+
+    await this.repositoryVersionService.removeByRepositoryId(repository.id);
+
     const versions = await this.getRepositoryReleasesInfo(
       owner,
       repositoryName,
@@ -60,7 +71,11 @@ export class GithubService {
 
     for (const version of versions) {
       // prisma에서 create도 테이블 동시 접근을 막은건지 Promise.all으로 병렬 처리 하려고 하면 에러가 나서 하나씩 await하게 변경
-      await this.repositoryVersionService.create(repositoryId, version);
+      await this.repositoryVersionService.create(repository.id, version);
     }
+
+    await this.repositoryService.update(repository.id, {
+      updatedAt: new Date(),
+    });
   }
 }
