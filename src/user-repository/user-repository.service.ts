@@ -1,8 +1,6 @@
-import { UserRepository } from './entities/user-repository.entity';
 import { PrismaService } from './../prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { CreateUserRepositoryInput } from './dto/create-user-repository.input';
-import { UpdateUserRepositoryInput } from './dto/update-user-repository.input';
 
 @Injectable()
 export class UserRepositoryService {
@@ -37,24 +35,18 @@ export class UserRepositoryService {
     });
   }
 
-  findOne(userId: number, repositoryId: number) {
+  findOne(id: number) {
     return this.prismaService.userRepository.findUnique({
       where: {
-        userId_repositoryId: {
-          userId,
-          repositoryId,
-        },
+        id,
       },
     });
   }
 
-  remove(userId: number, repositoryId: number) {
+  remove(id) {
     return this.prismaService.userRepository.delete({
       where: {
-        userId_repositoryId: {
-          userId,
-          repositoryId,
-        },
+        id,
       },
     });
   }

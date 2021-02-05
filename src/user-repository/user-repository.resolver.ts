@@ -10,7 +10,6 @@ import { UserRepositoryService } from './user-repository.service';
 import { UserRepository } from './entities/user-repository.entity';
 import { CreateUserRepositoryInput } from './dto/create-user-repository.input';
 import { User } from 'src/user/entities/user.entity';
-import { isAfter, subMinutes } from 'date-fns';
 import { UserInputError } from 'apollo-server-core';
 
 @Resolver(() => UserRepository)
@@ -40,7 +39,6 @@ export class UserRepositoryResolver {
 
     if (targetRepository) {
       const existUserRepository = await this.userRepositoryService.findOne(
-        user.id,
         targetRepository.id,
       );
 
@@ -70,10 +68,7 @@ export class UserRepositoryResolver {
   }
 
   @Mutation(() => UserRepository)
-  removeUserRepository(
-    @Args('repositoryId', { type: () => Int }) repositoryId: number,
-    @CurrentUser() user: User,
-  ) {
-    return this.userRepositoryService.remove(user.id, repositoryId);
+  async removeUserRepository(@Args('id', { type: () => Int }) id: number) {
+    return this.userRepositoryService.remove(id);
   }
 }
