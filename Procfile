@@ -1,0 +1,1 @@
+wem: npm run start:prod

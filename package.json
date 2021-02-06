@@ -12,7 +12,7 @@
     "start": "cross-env NODE_ENV=production nest start",
     "start:dev": "cross-env NODE_ENV=development nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "yarn prisma:prod & cross-env NODE_ENV=production node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -20,8 +20,11 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:migrate:dev": "dotenv -e .env.local -- npx prisma migrate dev --preview-feature",
+    "prisma:migrate:prod": "npx prisma migrate deploy --preview-feature",
     "prisma:generate:dev": "dotenv -e .env.local -- npx prisma generate",
+    "prisma:generate:prod": "npx prisma generate",
     "prisma:dev": "yarn prisma:migrate:dev & yarn prisma:generate:dev",
+    "prisma:prod": "yarn prisma:migrate:prod & yarn prisma:generate:prod",
     "prisma:studio": "dotenv -e .env.local -- npx prisma studio"
   },
   "dependencies": {
