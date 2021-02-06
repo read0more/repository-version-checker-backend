@@ -26,6 +26,7 @@ import { GraphQLError } from 'graphql';
       debug: process.env.NODE_ENV === Environment.Development,
       playground: process.env.NODE_ENV === Environment.Development,
       autoSchemaFile: 'schema.gql',
+      introspection: true,
       formatError: (error: GraphQLError) => {
         return error;
       },
