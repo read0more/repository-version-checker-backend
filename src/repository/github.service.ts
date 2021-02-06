@@ -54,20 +54,15 @@ export class GithubService {
 
   async updateReleaseInfo(
     repository: Repository,
-    owner: string,
-    repositoryName: string,
+    versions,
+    isNew: boolean = false,
   ) {
-    // 갱신한지 1분도 되지 않았다면 갱신하지 않음
-    if (!isAfter(subMinutes(new Date(), 1), new Date(repository.updatedAt))) {
+    // 정보가 이미 있는 레파지토리고, 갱신한지 1분도 되지 않았다면 갱신하지 않음
+    if (!isNew && !isAfter(subMinutes(new Date(), 1), new Date(repository.updatedAt))) {
       return;
     }
 
     await this.repositoryVersionService.removeByRepositoryId(repository.id);
-
-    const versions = await this.getRepositoryReleasesInfo(
-      owner,
-      repositoryName,
-    );
 
     for (const version of versions) {
       // prisma에서 create도 테이블 동시 접근을 막은건지 Promise.all으로 병렬 처리 하려고 하면 에러가 나서 하나씩 await하게 변경

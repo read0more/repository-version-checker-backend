@@ -25,15 +25,17 @@ export class UserResolver {
     // userRepository 버전 정보 갱신
     const userByDB = await this.userService.findOneById(user.id);
     const batchs = userByDB.repositories.map(
-      ({ repository, repositoryUrl }) => {
+      async ({ repository, repositoryUrl }) => {
         const [owner, repositoryName] = this.githubService.splitGithubUrl(
           repositoryUrl,
         );
-        return this.githubService.updateReleaseInfo(
-          repository,
+
+        const versions = await this.githubService.getRepositoryReleasesInfo(
           owner,
           repositoryName,
         );
+
+        return this.githubService.updateReleaseInfo(repository, versions);
       },
     );
 

@@ -36,6 +36,12 @@ export class UserRepositoryResolver {
     let targetRepository: Repository = await this.repositoryService.findOneByName(
       name,
     );
+    let isNew = false;
+
+    const versions = await this.githubService.getRepositoryReleasesInfo(
+      owner,
+      repositoryName,
+    );
 
     if (targetRepository) {
       const existUserRepository = await this.userRepositoryService.findOneByRepositoryIdAndUserId(
@@ -53,12 +59,14 @@ export class UserRepositoryResolver {
       targetRepository = await this.repositoryService.create({
         name,
       });
+
+      isNew = true;
     }
 
     await this.githubService.updateReleaseInfo(
       targetRepository,
-      owner,
-      repositoryName,
+      versions,
+      isNew,
     );
 
     return this.userRepositoryService.create(
