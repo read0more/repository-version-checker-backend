@@ -1,9 +1,11 @@
+import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from './../common/constants';
 import { RepositoryService } from './repository.service';
 import { Repository } from './entities/repository.entity';
 import { InvalidUrlException } from './exceptions/invalid-url.exception';
 import { RepositoryVersionService } from './../repository-version/repository-version.service';
 import { CreateRepositoryVersionInput } from './../repository-version/dto/create-repository-version.input';
 import { HttpService, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { isAfter, subMinutes } from 'date-fns';
 
 @Injectable()
@@ -12,6 +14,7 @@ export class GithubService {
     private readonly httpService: HttpService,
     private readonly repositoryService: RepositoryService,
     private readonly repositoryVersionService: RepositoryVersionService,
+    private readonly configService:ConfigService
   ) {}
 
   async getRepositoryReleasesInfo(owner: string, repositoryName: string) {
@@ -19,6 +22,12 @@ export class GithubService {
       const response = await this.httpService
         .get(
           `https://api.github.com/repos/${owner}/${repositoryName}/releases?per_page=10`,
+          {
+            auth: {
+                username: this.configService.get(GITHUB_CLIENT_ID),
+                password: this.configService.get(GITHUB_CLIENT_SECRET),
+            }
+          }
         )
         .toPromise();
 
