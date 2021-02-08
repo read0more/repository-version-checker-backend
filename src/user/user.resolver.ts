@@ -1,4 +1,3 @@
-import { UserRepositoryService } from './../user-repository/user-repository.service';
 import { GithubService } from './../repository/github.service';
 import { UnauthenticatedException } from '../auth/exceptions/unauthenticated.exception';
 import { GqlAuthGuard } from './../auth/guards/gql-auth.guard';

@@ -1,4 +1,3 @@
-import { AuthGuard } from '@nestjs/passport';
 import { CLIENT_LOGIN_URL } from './../common/constants';
 import { ConfigService } from '@nestjs/config';
 import { GithubAuthGuard } from './guards/github-auth.guard';
