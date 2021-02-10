@@ -5,4 +5,5 @@ export const CLIENT_URL = 'CLIENT_URL';
 export const CLIENT_LOGIN_URL = 'CLIENT_LOGIN_URL';
 export const DATABASE_URL = 'DATABASE_URL';
 export const JWT_SECRET = 'JWT_SECRET';
+export const INTROSPECTION_KEY = 'INTROSPECTION_KEY';
 export const JWT_EXPIRES_IN = '1d';

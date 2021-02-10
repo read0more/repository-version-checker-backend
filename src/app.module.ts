@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { validate, Environment } from './env.validation';
 import { GraphQLModule } from '@nestjs/graphql';
 import { GraphQLError } from 'graphql';
+import { checkIntrospectionPlugin } from './apollo.plugins';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { GraphQLError } from 'graphql';
         origin: process.env.CLIENT_URL,
         credentials: true,
       },
+      plugins: [checkIntrospectionPlugin],
     }),
     RepositoryModule,
     RepositoryVersionModule,

@@ -28,6 +28,9 @@ class EnvironmentVariables {
 
   @IsDefined()
   [constants.JWT_SECRET]: string;
+
+  @IsDefined()
+  [constants.INTROSPECTION_KEY]: string;
 }
 
 export function validate(config: Record<string, unknown>) {
