@@ -5,7 +5,7 @@
 // https://github.com/prisma/prisma/issues/4650
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
