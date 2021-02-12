@@ -6,4 +6,4 @@
 
 - NestJS
 - GraphQL(apollo-server-express)
-- prisma(SQLite로 이용)
+- prisma(postgresql로 이용)
